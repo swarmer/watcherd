@@ -1,0 +1,6 @@
+[package]
+name = "watcherd"
+version = "0.1.0"
+authors = ["Anton Barkovsky <anton@swarmer.me>"]
+
+[dependencies]
