@@ -18,9 +18,9 @@ Options:
 
 #[derive(Debug, RustcDecodable)]
 pub struct WatcherdArgs {
-    cmd_run: bool,
-    flag_version: bool,
-    flag_config: String,
+    pub cmd_run: bool,
+    pub flag_version: bool,
+    pub flag_config: String,
 }
 
 

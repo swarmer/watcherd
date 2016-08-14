@@ -1,7 +1,14 @@
 extern crate watcherd;
+use watcherd::args;
 
 
 fn main() {
-    let args = watcherd::args::parse_args();
-    println!("{:?}", args);
+    match args::parse_args() {
+        args::WatcherdArgs { flag_version: true, .. } => {
+            println!("{}", watcherd::VERSION);
+        },
+        _ => {
+            println!("{}", "wat");
+        }
+    }
 }
