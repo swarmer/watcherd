@@ -24,7 +24,7 @@ struct DocoptWatcherdArgs {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum WatcherdCommand {
     Version,
     Run { config_path: String },

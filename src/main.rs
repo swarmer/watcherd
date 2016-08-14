@@ -5,6 +5,7 @@ use std::process::exit;
 use watcherd::args;
 use watcherd::config;
 use watcherd::watcher;
+use watcherd::logging;
 
 
 fn run_watcher(config_path: &str) -> i32 {
@@ -30,6 +31,8 @@ fn run_watcher(config_path: &str) -> i32 {
 
 
 fn dispatch_command() -> i32 {
+    logging::init_logging();
+
     match args::parse_command() {
         args::WatcherdCommand::Version => {
             println!("{}", watcherd::VERSION);
