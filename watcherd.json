@@ -2,7 +2,7 @@
     "tasks": [
         {
             "name": "sleeper",
-            "command": "sleep 10s"
+            "command": "sleep 2s"
         },
         {
             "name": "file-server",

@@ -3,6 +3,9 @@ pub use self::errors::*;
 
 use std::process;
 
+use nix::sys;
+use nix::sys::wait::WaitStatus;
+
 use super::config;
 
 
@@ -37,6 +40,40 @@ fn start_subprocesses(config: &config::Config) -> Result<State> {
 }
 
 
+fn restart_process(state: &mut State, pid: u32) -> Result<()> {
+    let process =
+        state.processes.iter_mut()
+        .find(|p| p.child.id() == pid)
+        .expect("Unexpected child pid");
+
+    debug!("Running `{}`", process.task.command_line);
+    let child = try!(
+        process::Command::new("sh")
+        .arg("-c")
+        .arg(&process.task.command_line)
+        .spawn()
+    );
+    process.child = child;
+
+    Ok(())
+}
+
+
+fn watch_subprocesses(state: &mut State) -> Result<()> {
+    loop {
+        let status = try!(sys::wait::wait());
+        warn!("Process update: {:?}", status);
+        match status {
+            WaitStatus::Signaled(pid, _, _) | WaitStatus::Exited(pid, _) => {
+                info!("Restarting process with pid {}", pid);
+                try!(restart_process(state, pid as u32));
+            },
+            _ => {},
+        }
+    }
+}
+
+
 pub fn run(config: config::Config) -> Result<()> {
     debug!("Config: {:?}", config);
 
@@ -44,9 +81,7 @@ pub fn run(config: config::Config) -> Result<()> {
     let mut state = try!(start_subprocesses(&config));
     info!("Started {} processes", state.processes.len());
 
-    for process in &mut state.processes {
-        try!(process.child.wait());
-    }
+    try!(watch_subprocesses(&mut state));
 
     Ok(())
 }
