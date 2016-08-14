@@ -1,0 +1,12 @@
+{
+    "tasks": [
+        {
+            "name": "sleeper",
+            "command": "sleep 10s"
+        },
+        {
+            "name": "file-server",
+            "command": "python3 -m http.server"
+        }
+    ]
+}

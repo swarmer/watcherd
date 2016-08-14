@@ -6,3 +6,5 @@ authors = ["Anton Barkovsky <anton@swarmer.me>"]
 [dependencies]
 rustc-serialize = "0.3"
 docopt = "0.6"
+serde = "0.8"
+serde_json = "0.8"

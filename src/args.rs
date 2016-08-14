@@ -1,4 +1,4 @@
-use docopt::Docopt;
+use docopt;
 
 
 const USAGE: &'static str = "
@@ -32,12 +32,9 @@ pub enum WatcherdCommand {
 
 
 fn parse_args() -> DocoptWatcherdArgs {
-    let args =
-        Docopt::new(USAGE)
-        .and_then(|docopt| docopt.decode())
-        .unwrap_or_else(|e| e.exit());
-
-    args
+    docopt::Docopt::new(USAGE)
+    .and_then(|docopt| docopt.decode())
+    .unwrap_or_else(|e| e.exit())
 }
 
 pub fn parse_command() -> WatcherdCommand {
