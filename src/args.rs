@@ -17,18 +17,36 @@ Options:
 
 
 #[derive(Debug, RustcDecodable)]
-pub struct WatcherdArgs {
-    pub cmd_run: bool,
-    pub flag_version: bool,
-    pub flag_config: String,
+struct DocoptWatcherdArgs {
+    cmd_run: bool,
+    flag_version: bool,
+    flag_config: String,
 }
 
 
-pub fn parse_args() -> WatcherdArgs {
+#[derive(Debug)]
+pub enum WatcherdCommand {
+    Version,
+    Run { config_path: String },
+}
+
+
+fn parse_args() -> DocoptWatcherdArgs {
     let args =
         Docopt::new(USAGE)
         .and_then(|docopt| docopt.decode())
         .unwrap_or_else(|e| e.exit());
 
     args
+}
+
+pub fn parse_command() -> WatcherdCommand {
+    match parse_args() {
+        DocoptWatcherdArgs { flag_version: true, .. } => WatcherdCommand::Version,
+        DocoptWatcherdArgs { cmd_run: true, flag_config: config, .. } =>
+            WatcherdCommand::Run { config_path: config },
+        _ => {
+            unreachable!();
+        }
+    }
 }

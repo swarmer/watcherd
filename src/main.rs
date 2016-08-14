@@ -3,12 +3,12 @@ use watcherd::args;
 
 
 fn main() {
-    match args::parse_args() {
-        args::WatcherdArgs { flag_version: true, .. } => {
+    match args::parse_command() {
+        args::WatcherdCommand::Version => {
             println!("{}", watcherd::VERSION);
         },
-        _ => {
-            println!("{}", "wat");
-        }
+        args::WatcherdCommand::Run { config_path } => {
+            println!("Running from {}", config_path);
+        },
     }
 }
