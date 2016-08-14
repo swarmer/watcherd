@@ -18,10 +18,7 @@ struct Process {
 }
 
 
-pub fn run(config: config::Config) -> Result<()> {
-    debug!("Config: {:?}", config);
-
-    debug!("Starting subprocesses");
+fn start_subprocesses(config: &config::Config) -> Result<State> {
     let mut state = State { processes: Vec::new() };
     for task in &config.tasks {
         debug!("Running `{}`", task.command_line);
@@ -35,6 +32,16 @@ pub fn run(config: config::Config) -> Result<()> {
         let process = Process { task: task.clone(), child: child };
         state.processes.push(process);
     }
+
+    Ok(state)
+}
+
+
+pub fn run(config: config::Config) -> Result<()> {
+    debug!("Config: {:?}", config);
+
+    debug!("Starting subprocesses");
+    let mut state = try!(start_subprocesses(&config));
     info!("Started {} processes", state.processes.len());
 
     for process in &mut state.processes {
