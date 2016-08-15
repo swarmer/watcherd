@@ -2,11 +2,13 @@
     "tasks": [
         {
             "name": "sleeper",
-            "command": "sleep 2s"
+            "command": "sleep 2s",
+            "restart": "always"
         },
         {
             "name": "file-server",
-            "command": "python3 -m http.server"
+            "command": "python3 -m http.server",
+            "restart": "nonzero"
         }
     ]
 }
